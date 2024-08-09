@@ -29,7 +29,7 @@
             {{ date }}
         </h3>
         <button @click="ConfirmBooking()" v-if="id>0" >Submit</button>
-        <button @click="ConfirmBooking()" v-if="id<0">please Login</button>
+        <button @click="notloggedin()" v-if="id<0">please Login</button>
    </div>
   </div>
 </template>
@@ -82,6 +82,9 @@ export default {
         
     },
     methods: {
+     notloggedin(){
+        this.$router.push('/login')
+     },
      fetchlocation(locationID){
          return fetch('https://localhost:5001/api/Location/GetLocation' + locationID)
          .then(response => response.json())
@@ -128,6 +131,7 @@ export default {
             const timeDiff = Math.abs(checkOut.getTime() - checkIn.getTime());
             const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24))+1;
             this.PostBooking(daysDiff, this.locationID, this.checkInDate)
+            this.$router.push('/Bookings')
         },
         async PostBooking(daysDiff, locationID, checkInDate){ {
             await fetch('https://localhost:5001/api/Booking', {
